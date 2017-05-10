@@ -16,12 +16,25 @@ gulp.task('scripts', function() {
     .pipe(concat('main.js')) // file name
     .pipe(gulp.dest('./dist/')); // destination
 });
+ 
+gulp.task('html', function() {
+  return gulp.src(['./lib/index.html']) // source
+    .pipe(gulp.dest('./dist/')); // destination
+});
 
 gulp.task('serve', [
+	'html',
 	'scripts',
 	'watch'
 ]);
 
 gulp.task('watch', function () {
-    gulp.watch('./lib/*.js', { ignoreInitial: false }, ['scripts']);
+    gulp.watch(
+    	'./lib/*.js',
+    	{ignoreInitial: false},
+    	[
+    		'html',
+    		'scripts'
+    	]
+    );
 });
