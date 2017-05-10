@@ -2,19 +2,34 @@
 
 import gulp from 'gulp';
 import concat from 'gulp-concat';
-
-gulp.task('default', ['sumTingWong'], function() {
-  console.log('it works m8');
-});
-
-gulp.task('sumTingWong', [], function() {
-  console.log('This should appear first');
-})
+import browserify from "browserify";
+import uglify from "gulp-uglify";
+import source from "vinyl-source-stream";
+import buffer from "vinyl-buffer";
  
 gulp.task('scripts', () => {
-  gulp.src(['./lib/main.js','./lib/*.js']) // source
-    .pipe(concat('main.js')) // file name
-    .pipe(gulp.dest('./dist/')); // destination
+
+	// Generate non minified
+	browserify({
+		entries: './lib/main.js',
+		debug: true
+	})
+	.bundle()
+	.pipe(source('main.js')) // **
+	.pipe(gulp.dest('./dist'));
+
+	// Generate minified
+	browserify({
+		entries: './lib/main.js',
+		debug: true
+	})
+	.bundle()
+	.pipe(source('main.min.js')) // **
+	.pipe(buffer())
+	.pipe(uglify())
+	.pipe(gulp.dest('./dist'));
+
+	// ** A basic implementation can be done as above. But this won’t work when you need to pipe with other gulp plugins like uglify or gulp.dist. This is because browserify.bundle() return a text stream where as gulp works using vinyl stream. In order to browserify to work with other plugins you need to use vinyl-source-stream.
 });
  
 gulp.task('html', () => {
