@@ -1,7 +1,7 @@
 'use strict';
 
-var gulp = require('gulp');
-var concat = require('gulp-concat');
+import gulp from 'gulp';
+import concat from 'gulp-concat';
 
 gulp.task('default', ['sumTingWong'], function() {
   console.log('it works m8');
@@ -11,14 +11,14 @@ gulp.task('sumTingWong', [], function() {
   console.log('This should appear first');
 })
  
-gulp.task('scripts', function() {
-  return gulp.src(['./lib/main.js','./lib/*.js']) // source
+gulp.task('scripts', () => {
+  gulp.src(['./lib/main.js','./lib/*.js']) // source
     .pipe(concat('main.js')) // file name
     .pipe(gulp.dest('./dist/')); // destination
 });
  
-gulp.task('html', function() {
-  return gulp.src(['./lib/index.html']) // source
+gulp.task('html', () => {
+  gulp.src(['./lib/index.html']) // source
     .pipe(gulp.dest('./dist/')); // destination
 });
 
@@ -29,12 +29,12 @@ gulp.task('serve', [
 ]);
 
 gulp.task('watch', function () {
-    gulp.watch(
-    	'./lib/*.js',
-    	{ignoreInitial: false},
-    	[
-    		'html',
-    		'scripts'
-    	]
-    );
+    gulp.watch([
+		'./lib/*.js',
+		'./lib/*.html'
+	],
+	[
+		'html',
+		'scripts'
+	]);
 });
